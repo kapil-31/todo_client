@@ -1,29 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../app'
+import type { RootState } from '..'
 import { randomId } from '../../helpers/utils'
+import mockData from '../../helpers/mockData'
+import * as BoardHelper from '../../helpers/boardHelper'
 type cardType = { id: string; content: string }
 type todoType = {
   id: string
   name: string
   cards: cardType[]
 }
-interface TodoSlice {
-  todos: todoType[] | []
+interface TodoSliceType {
+  lists: todoType[] | []
   offset: number
 }
 
-const initialState: TodoSlice = {
-  todos: [],
+const initialState: TodoSliceType = {
+  lists: mockData,
   offset: 0,
 }
 
-export const counterSlice = createSlice({
-  name: 'todos',
+export const TodoSlice = createSlice({
+  name: 'lists',
   initialState,
   reducers: {
     addList: (state, action: PayloadAction<any>) => {
-      state.todos = [
-        ...state.todos,
+      state.lists = [
+        ...state.lists,
         {
           id: randomId(),
           name: action.payload,
@@ -33,15 +35,15 @@ export const counterSlice = createSlice({
       state.offset += 1
     },
     removeList: (state, action: PayloadAction<any>) => {
-      state.todos = state.todos.splice(action.payload, 1)
+      state.lists = state.lists.splice(action.payload, 1)
     },
     duplicateList: (state, action: PayloadAction<any>) => {
-      const listTopDuplicate = state.todos[action.payload]
+      const listTopDuplicate = state.lists[action.payload]
 
       return {
         ...state,
-        todos: [
-          ...state.todos.slice(0, action.payload),
+        lists: [
+          ...state.lists.slice(0, action.payload),
           {
             ...listTopDuplicate,
             id: randomId(),
@@ -50,14 +52,15 @@ export const counterSlice = createSlice({
               id: randomId(),
             })),
           },
-          ...state.todos.slice(action.payload),
+          ...state.lists.slice(action.payload),
         ],
       }
     },
     addCard: (state, action: PayloadAction<any>) => {
+      console.log({ action })
       return {
         ...state,
-        todos: state.todos.map((list, index) => {
+        lists: state.lists.map((list, index) => {
           if (index !== action.payload.listIndex) {
             return list
           }
@@ -74,7 +77,7 @@ export const counterSlice = createSlice({
     removeCard: (state, action: PayloadAction<any>) => {
       return {
         ...state,
-        todos: state.todos.map((list, index) => {
+        lists: state.lists.map((list, index) => {
           if (index !== action.payload.listIndex) {
             return list
           }
@@ -88,9 +91,10 @@ export const counterSlice = createSlice({
       }
     },
     duplicateCard: (state, action: PayloadAction<any>) => {
+      console.log({ action })
       return {
         ...state,
-        todos: state.todos.map((list, listIndex) => {
+        lists: state.lists.map((list, listIndex) => {
           if (listIndex !== action.payload.listIndex) {
             return list
           }
@@ -109,5 +113,31 @@ export const counterSlice = createSlice({
         }),
       }
     },
+    reOrderList: (state, action: PayloadAction<any>) => {
+      const listIndex = state.lists.findIndex(
+        (list) => list.id === action.payload.listId
+      )
+      const list = state.lists[listIndex]
+      const orderedListCards = BoardHelper.reOrderList(
+        list.cards,
+        action.payload.cardSourceIndex,
+        action.payload.cardDestinationIndex
+      )
+      let newState = [...state.lists]
+      newState[listIndex] = {
+        ...newState[listIndex],
+        cards: orderedListCards as cardType[],
+      }
+
+      return {
+        ...state,
+        lists: newState,
+      }
+    },
   },
 })
+export const { addCard, addList, removeCard, duplicateCard, reOrderList } =
+  TodoSlice.actions
+
+export const selectCount = (state: RootState) => state.todos.lists
+export default TodoSlice.reducer

@@ -8,15 +8,30 @@ import { bindActionCreators } from 'redux'
 import mockData from '../helpers/mockData'
 import { BoardContainer } from '../styles/Board.styles'
 import CardList from '../components/CardList'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import {
+  addCard,
+  duplicateCard,
+  reOrderList,
+  removeCard,
+} from '../redux/features/todoSlice'
 
 const Board = (props: any) => {
+  const list = useAppSelector((state) => state.todos.lists)
+  const dispatch = useAppDispatch()
   const onDragEnd = (result: any) => {
     const { source, destination, draggableId } = result
     if (!destination) {
       return
     }
     if (source.droppableId === destination.droppableId) {
-      props.reOrderList(source.droppableId, source.index, destination.index)
+      dispatch(
+        reOrderList({
+          listId: source.droppableId,
+          cardSourceIndex: source.index,
+          cardDestinationIndex: destination.index,
+        })
+      )
     } else {
       props.moveCardToList(
         source.droppableId,
@@ -31,7 +46,7 @@ const Board = (props: any) => {
     <div>
       <BoardContainer countColumns={mockData.length + 1}>
         <DragDropContext onDragEnd={onDragEnd}>
-          {mockData.map((list: any, listIndex: number) => {
+          {list.map((list: any, listIndex: number) => {
             return (
               <CardList
                 key={list.id}
@@ -46,13 +61,13 @@ const Board = (props: any) => {
                   props.onChangeCardContent(listIndex, cardIndex, content)
                 }
                 onAddCard={(cardContent) =>
-                  props.onAddCard(listIndex, cardContent)
+                  dispatch(addCard({ listIndex, cardContent }))
                 }
                 onRemoveCard={(cardIndex) =>
-                  props.onRemoveCard(listIndex, cardIndex)
+                  dispatch(removeCard({ listIndex, cardIndex }))
                 }
                 onDuplicateCard={(cardIndex) =>
-                  props.onDuplicateCard(listIndex, cardIndex)
+                  dispatch(duplicateCard({ listIndex, cardIndex }))
                 }
                 searchText={props.search}
               />
