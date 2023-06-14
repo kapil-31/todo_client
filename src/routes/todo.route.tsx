@@ -1,12 +1,17 @@
 import { Outlet } from 'react-router-dom'
 
+import Header from '../components/Headers'
+import Board from '../containers/Board'
+
 export default [
   {
     path: '/',
     element: (
-      <div>
-        <div>Create,track,estimate your work</div> <Outlet />
-      </div>
+      <>
+        <Header />
+        <Board />
+        <Outlet />
+      </>
     ),
     children: [
       {

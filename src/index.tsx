@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { ThemeProvider } from 'styled-components'
 
@@ -9,13 +9,13 @@ import GlobalStyle from './styles/globalStyles'
 import { BrowserRouter } from 'react-router-dom'
 
 const rootEl = document.getElementById('root')
-
-render(
-  <BrowserRouter basename='/'>
-    <ThemeProvider theme={theme}>
-      <App />
-      <GlobalStyle />
-    </ThemeProvider>
-  </BrowserRouter>,
-  rootEl
-)
+if (rootEl) {
+  createRoot(rootEl).render(
+    <BrowserRouter basename='/'>
+      <ThemeProvider theme={theme}>
+        <App />
+        <GlobalStyle />
+      </ThemeProvider>
+    </BrowserRouter>
+  )
+}
