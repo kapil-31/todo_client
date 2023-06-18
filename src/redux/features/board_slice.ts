@@ -44,10 +44,18 @@ export const BoardSlice = createSlice({
   initialState,
   reducers: {
     addList: (state, action: PayloadAction<any>) => {
-      state.lists = [...state.lists, action.payload]
+      state.lists = [
+        ...state.lists,
+        {
+          ...action.payload,
+          cards: [],
+        },
+      ]
     },
     removeList: (state, action: PayloadAction<any>) => {
-      state.lists = state.lists.filter((item) => item.id === action.payload)
+      console.log(action.payload)
+
+      state.lists.splice(action.payload.listIndex, 1)
     },
     rerrangeList: (state, action: PayloadAction<any>) => {
       let {
@@ -202,6 +210,7 @@ export const {
   removeCard,
   duplicateCard,
   reOrderList,
+  removeList,
   rerrangeList,
   updateCardContent,
   renameBoarTitle,

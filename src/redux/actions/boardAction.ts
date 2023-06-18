@@ -1,12 +1,12 @@
 import { AppDispatch } from '..'
 import { IBoardCreatePayload, appApi } from '../../apis'
-import { addList, renameBoarTitle } from '../features/board_slice'
+import { addList, removeList, renameBoarTitle } from '../features/board_slice'
 
-export const createList = (data?: IBoardCreatePayload) => {
+export const createList = (data: IBoardCreatePayload) => {
   return async (dispatch: AppDispatch) => {
     try {
-      const newList = await appApi.createList(data)
-      dispatch(addList(newList))
+      const response = await appApi.createList(data)
+      dispatch(addList(response.data))
     } catch (e) {}
   }
 }
@@ -25,6 +25,14 @@ export const renameBoard = (id: string, name: string, listIndex: number) => {
     try {
       let resposne = await appApi.renametitle(id, name)
       dispatch(renameBoarTitle({ name, listIndex }))
+    } catch (e) {}
+  }
+}
+export const removeBoard = (id: string, listIndex: number) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      let resposne = await appApi.deleteList(id)
+      dispatch(removeList({ listIndex }))
     } catch (e) {}
   }
 }

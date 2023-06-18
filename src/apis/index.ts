@@ -6,7 +6,8 @@ import { CardType } from '../redux/features/board_slice'
 import { request } from './config'
 export interface IBoardCreatePayload {
   name: string
-  status: string
+  position: number
+  // status: string
 }
 export interface ITaskCreateTaskPayload {
   content: string

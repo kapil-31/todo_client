@@ -66,10 +66,9 @@ const CardListHeader = (props: ICardListHeader) => {
             top='11px'
             right={editMode ? '11px' : '42px'}
           >
-            <IconButton
-              onClick={onClickSaveEdit}
-              icontype={editMode ? 'confirm' : 'edit'}
-            />
+            {editMode && (
+              <IconButton onClick={onClickSaveEdit} icontype={'confirm'} />
+            )}
           </IconButton.ButtonContainer>
         )}
         {onHover && !editMode && (
