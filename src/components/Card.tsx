@@ -8,6 +8,7 @@ import * as UtilsHelper from '../helpers/utils'
 import ContentEditable from './ContentEditable'
 
 import IconButton from './IconButton'
+import moment from 'moment'
 
 const Card = ({
   card,
@@ -96,6 +97,18 @@ const Card = ({
               onChange={(e) => setCardContent(e.target.value)}
               onKeyDown={handleKeyDown}
             />
+
+            <span
+              style={{
+                fontSize: '9px',
+                display: 'relative',
+                top: 20,
+              }}
+            >
+              {moment(
+                moment(card.createdAt).format('YYYY-MM-DD HH:mm:ss')
+              ).fromNow()}
+            </span>
           </CardContainer>
         )}
       </Draggable>

@@ -47,8 +47,6 @@ const Board = (props: any) => {
     if (source.droppableId !== destination.droppableId) {
       const [removed] = sourceTodos.splice(source.index, 1)
       destinationTodos.splice(destination.index, 0, removed)
-      lists[sourceColIndex].cards = sourceTodos
-      lists[destinationColIndex].cards = destinationTodos
     } else {
       const [removed] = destinationTodos.splice(source.index, 1)
       destinationTodos.splice(destination.index, 0, removed)

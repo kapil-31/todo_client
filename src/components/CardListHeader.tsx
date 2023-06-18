@@ -73,9 +73,6 @@ const CardListHeader = (props: ICardListHeader) => {
         )}
         {onHover && !editMode && (
           <>
-            <IconButton.ButtonContainer top='11px' right='22px'>
-              <IconButton onClick={props.onDuplicateList} icontype='copy' />
-            </IconButton.ButtonContainer>
             <IconButton.ButtonContainer top='11px' right='3px'>
               <IconButton onClick={props.onRemoveList} icontype='delete' />
             </IconButton.ButtonContainer>
