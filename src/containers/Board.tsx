@@ -1,74 +1,102 @@
-//@ts-nocheck
-
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import mockData from '../helpers/mockData'
 import { BoardContainer } from '../styles/Board.styles'
 import CardList from '../components/CardList'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { fetchBoardTask } from '../redux/features/board_slice'
 import {
-  addCard,
-  duplicateCard,
-  reOrderList,
-  removeCard,
-} from '../redux/features/todoSlice'
+  createTask,
+  deleteTask,
+  duplicateTask,
+  onCardContentChange,
+  updateTodoPosition,
+} from '../redux/actions/taskAction'
+import { renameBoard } from '../redux/actions/boardAction'
 
 const Board = (props: any) => {
-  const list = useAppSelector((state) => state.todos.lists)
+  const lists = useAppSelector((state) => state.Boards.lists)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchBoardTask())
+  }, [])
   const onDragEnd = (result: any) => {
     const { source, destination, draggableId } = result
-    if (!destination) {
-      return
-    }
-    if (source.droppableId === destination.droppableId) {
-      dispatch(
-        reOrderList({
-          listId: source.droppableId,
-          cardSourceIndex: source.index,
-          cardDestinationIndex: destination.index,
-        })
-      )
-    } else {
-      props.moveCardToList(
-        source.droppableId,
-        draggableId,
-        destination.droppableId,
-        destination.index
-      )
-    }
-  }
+    if (!destination) return
+    const sourceColIndex = lists.findIndex(
+      (item) => item.id === source.droppableId
+    )
+    const destinationColIndex = lists.findIndex(
+      (item) => item.id === destination.droppableId
+    )
 
+    const sourceCol = lists[sourceColIndex]
+    const destinationCol = lists[destinationColIndex]
+
+    const sourceSectionId = sourceCol.id
+    const destinationSectionId = destinationCol.id
+
+    const sourceTodos = [...sourceCol.cards]
+    const destinationTodos = [...destinationCol.cards]
+
+    if (source.droppableId !== destination.droppableId) {
+      const [removed] = sourceTodos.splice(source.index, 1)
+      destinationTodos.splice(destination.index, 0, removed)
+      lists[sourceColIndex].cards = sourceTodos
+      lists[destinationColIndex].cards = destinationTodos
+    } else {
+      const [removed] = destinationTodos.splice(source.index, 1)
+      destinationTodos.splice(destination.index, 0, removed)
+    }
+
+    dispatch(
+      updateTodoPosition({
+        resourceList: sourceTodos,
+        destinationList: destinationTodos,
+        resourceSectionId: sourceSectionId,
+        destinationSectionId: destinationSectionId,
+        sourceColIndex,
+        destinationColIndex,
+        isSameBoard: source.droppableId === destination.droppableId,
+      })
+    )
+  }
   return (
     <div>
-      <BoardContainer countColumns={mockData.length + 1}>
+      <BoardContainer countcol={lists.length + 1}>
         <DragDropContext onDragEnd={onDragEnd}>
-          {list.map((list: any, listIndex: number) => {
+          {lists.map((list: any, listIndex: number) => {
+            let cards = lists[listIndex].cards
             return (
               <CardList
                 key={list.id}
                 droppableId={list.id}
                 list={list}
-                onChangeListName={(listName) =>
-                  props.onChangeListName(listIndex, listName)
+                onChangeListName={(listName: any) =>
+                  dispatch(renameBoard(list.id, listName, listIndex))
                 }
-                onRemoveList={() => props.onRemoveList(listIndex)}
-                onDuplicateList={() => props.onDuplicateList(listIndex)}
-                onChangeCardContent={(cardIndex, content) =>
-                  props.onChangeCardContent(listIndex, cardIndex, content)
-                }
-                onAddCard={(cardContent) =>
-                  dispatch(addCard({ listIndex, cardContent }))
-                }
-                onRemoveCard={(cardIndex) =>
-                  dispatch(removeCard({ listIndex, cardIndex }))
-                }
-                onDuplicateCard={(cardIndex) =>
-                  dispatch(duplicateCard({ listIndex, cardIndex }))
-                }
+                onRemoveList={() => {}}
+                onDuplicateList={() => {}}
+                onChangeCardContent={(cardIndex: number, content: string) => {
+                  let cardId = lists[listIndex].cards[cardIndex].id as string
+                  dispatch(
+                    onCardContentChange(listIndex, cardIndex, cardId, content)
+                  )
+                }}
+                onAddCard={(cardContent: string) => {
+                  dispatch(createTask(list.id, cardContent))
+                }}
+                onRemoveCard={(cardIndex: number) => {
+                  let cardId = lists[listIndex].cards[cardIndex].id as string
+                  dispatch(deleteTask(cardId, listIndex))
+                }}
+                onDuplicateCard={(cardIndex: number) => {
+                  let id = cards[cardIndex].id as string
+
+                  dispatch(
+                    duplicateTask(id, listIndex, cardIndex, lists[listIndex].id)
+                  )
+                }}
                 searchText={props.search}
               />
             )

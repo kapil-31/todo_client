@@ -54,7 +54,7 @@ const AddForm = (props) => {
           placeholder={
             focus || value ? props.focusPlaceholder : props.placeholder
           }
-          darkFont={props.darkFont}
+          darkfont={Boolean(props.darkfont)}
           gray={props.gray}
         />
         {value && (
@@ -71,13 +71,4 @@ const AddForm = (props) => {
   )
 }
 
-AddForm.propTypes = {
-  onConfirm: PropTypes.func,
-  placeholder: PropTypes.string,
-  focusPlaceholder: PropTypes.string,
-  darkFont: PropTypes.bool,
-  gray: PropTypes.bool,
-  width: PropTypes.string,
-  maxWidth: PropTypes.string,
-}
 export default AddForm

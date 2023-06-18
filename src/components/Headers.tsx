@@ -18,38 +18,7 @@ import IconButton from './IconButton'
 const Header = (props: any) => {
   return (
     <HeaderContainer>
-      <HeaderLogoContainer>
-        <HeaderInputWrapper>
-          <SearchInput
-            placeholder='Search....'
-            value={props.search}
-            onChange={(e) => {
-              console.log({ e })
-            }}
-          />
-        </HeaderInputWrapper>
-        <Link to='/board'>
-          <HeaderLogo src={logo}></HeaderLogo>
-        </Link>
-        <HeaderIconsContainer>
-          <IconButton
-            icontype='undo'
-            fontSize='15px'
-            disabled={!props.hasPreviousStates}
-            onClick={() => {
-              console.log('button')
-            }}
-          />
-          <IconButton
-            icontype='redo'
-            fontSize='15px'
-            onClick={() => {
-              console.log('redo')
-            }}
-            disabled={!props.hasNextStates}
-          />
-        </HeaderIconsContainer>
-      </HeaderLogoContainer>
+      <HeaderLogoContainer></HeaderLogoContainer>
     </HeaderContainer>
   )
 }

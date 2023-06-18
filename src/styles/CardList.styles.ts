@@ -1,11 +1,13 @@
 //@ts-nocheck
 import styled from 'styled-components'
 
-export const CardListContainer = styled.div`
-  background: ${(props) =>
-    props.isDraggingOver
+export const CardListContainer: any = styled.div`
+  background: ${(props) => {
+    console.log(props.isdraggeover)
+    return props.isdraggeover == 'true'
       ? props.theme.draggingOverGray
-      : props.theme.mediumGray};
+      : props.theme.mediumGray
+  }};
   padding: 8px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
@@ -15,7 +17,7 @@ export const CardListContainer = styled.div`
 export const CardListHeader = styled.div`
   position: relative;
   background: ${(props) =>
-    props.isDraggingOver
+    props.isdraggeover == 'true'
       ? props.theme.draggingOverGray
       : props.theme.mediumGray};
   padding: 9px 11px 1px 9px;

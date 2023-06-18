@@ -22,17 +22,17 @@ export const Input = styled.input`
   cursor: pointer;
 
   ::-webkit-input-placeholder {
-    color: ${(props) => (props.darkFont ? props.theme.primaryFont : 'white')};
+    color: ${(props) => (props.darkfont ? props.theme.primaryFont : 'white')};
   }
 
   :-ms-input-placeholder {
-    color: ${(props) => (props.darkFont ? props.theme.primaryFont : 'white')};
+    color: ${(props) => (props.darkfont ? props.theme.primaryFont : 'white')};
   }
 
   ::placeholder {
     color: ${(props) => {
       console.log({ props })
-      return props.darkFont ? props.theme.primaryFont : 'white'
+      return props.darkfont ? props.theme.primaryFont : 'white'
     }};
   }
 

@@ -1,22 +1,32 @@
-//@ts-nocheck
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Droppable } from 'react-beautiful-dnd'
 import Card from './Card'
 import { CardListContainer, CardListWrapper } from '../styles/CardList.styles'
 import CardListHeader from './CardListHeader'
 import AddForm from './AddForm'
+import { ListType } from '../redux/features/board_slice'
 
-const getFilteredCards = (cards, searchText) => {
+const getFilteredCards = (cards: any, searchText: any) => {
   if (searchText) {
-    return cards.filter((card) =>
+    return cards.filter((card: any) =>
       card.content.toLowerCase().includes(searchText.toLowerCase())
     )
   }
   return cards
 }
-
-const CardList = (props) => {
+interface ICardListType {
+  list: ListType
+  onChangeListName: any
+  onRemoveList: any
+  onDuplicateList: () => any
+  droppableId: string
+  searchText: any
+  onChangeCardContent: (index: number, content: string) => any
+  onRemoveCard: (index: number) => void
+  onDuplicateCard: (index: number) => void
+  onAddCard: (content: string) => void
+}
+const CardList = (props: ICardListType) => {
+  console.log({ d: props.droppableId })
   return (
     <CardListWrapper>
       <CardListHeader
@@ -29,12 +39,12 @@ const CardList = (props) => {
         {(provided, snapshot) => (
           <CardListContainer
             ref={provided.innerRef}
-            isDraggingOver={snapshot.isDraggingOver}
+            isdraggeover={snapshot.isDraggingOver ? 'true' : 'false'}
           >
             {getFilteredCards(props.list.cards, props.searchText).map(
-              (card, index) => (
+              (card: any, index: any) => (
                 <Card
-                  key={card.id}
+                  key={card._id}
                   card={card}
                   index={index}
                   onChangeCardContent={(content) =>
@@ -50,7 +60,7 @@ const CardList = (props) => {
               onConfirm={props.onAddCard}
               placeholder='+ Add new card'
               focusPlaceholder='Enter card content'
-              darkFont
+              darkfont
               width='auto'
               gray
             />
@@ -61,16 +71,4 @@ const CardList = (props) => {
   )
 }
 
-CardList.propTypes = {
-  list: PropTypes.object,
-  searchText: PropTypes.string,
-  onChangeCardContent: PropTypes.func,
-  onChangeListName: PropTypes.func,
-  onRemoveList: PropTypes.func,
-  droppableId: PropTypes.string,
-  onAddCard: PropTypes.func,
-  onRemoveCard: PropTypes.func,
-  onDuplicateCard: PropTypes.func,
-  onDuplicateList: PropTypes.func,
-}
 export default CardList

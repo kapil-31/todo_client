@@ -7,7 +7,7 @@ import ContentEditable from './ContentEditable'
 import IconButton from './IconButton'
 import * as UtilsHelper from '../helpers/utils'
 
-const CardListHeader = (props: any) => {
+const CardListHeader = (props: ICardListHeader) => {
   const ref = useRef(null)
   const [onHover, setOnHover] = useState(false)
   const [editMode, setEditMode] = useState(false)
@@ -68,17 +68,17 @@ const CardListHeader = (props: any) => {
           >
             <IconButton
               onClick={onClickSaveEdit}
-              iconType={editMode ? 'confirm' : 'edit'}
+              icontype={editMode ? 'confirm' : 'edit'}
             />
           </IconButton.ButtonContainer>
         )}
         {onHover && !editMode && (
           <>
             <IconButton.ButtonContainer top='11px' right='22px'>
-              <IconButton onClick={props.onDuplicateList} iconType='copy' />
+              <IconButton onClick={props.onDuplicateList} icontype='copy' />
             </IconButton.ButtonContainer>
             <IconButton.ButtonContainer top='11px' right='3px'>
-              <IconButton onClick={props.onRemoveList} iconType='delete' />
+              <IconButton onClick={props.onRemoveList} icontype='delete' />
             </IconButton.ButtonContainer>
           </>
         )}
@@ -87,11 +87,10 @@ const CardListHeader = (props: any) => {
   )
 }
 
-CardListHeader.propTypes = {
-  listName: PropTypes.string,
-  onChangeListName: PropTypes.func,
-  onRemoveList: PropTypes.func,
-  onDuplicateList: PropTypes.func,
+export type ICardListHeader = {
+  listName?: PropTypes.string
+  onChangeListName?: PropTypes.func
+  onRemoveList?: PropTypes.func
+  onDuplicateList?: PropTypes.func
 }
-
 export default CardListHeader
