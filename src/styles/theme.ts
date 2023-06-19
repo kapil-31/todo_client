@@ -11,6 +11,7 @@ const theme = {
   grayHover: '#f3f3f3',
   grayIcon: '#939393',
   whiteIcon: '#FFFF',
+  black: 'black;',
 }
 
 export default theme

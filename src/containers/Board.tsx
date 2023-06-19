@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { BoardContainer } from '../styles/Board.styles'
 import CardList from '../components/CardList'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { addList, fetchBoardTask } from '../redux/features/board_slice'
+import { fetchBoardTask } from '../redux/features/board_slice'
 import {
   createTask,
   deleteTask,
@@ -11,17 +11,27 @@ import {
   onCardContentChange,
   updateTodoPosition,
 } from '../redux/actions/taskAction'
-import {
-  createList,
-  removeBoard,
-  renameBoard,
-} from '../redux/actions/boardAction'
-import AddForm from '../components/AddForm'
+import { removeBoard, renameBoard } from '../redux/actions/boardAction'
+import Table from '../components/Table'
+import { request } from '../apis/config'
 
 const Board = (props: any) => {
   const lists = useAppSelector((state) => state.Boards.lists)
+  const loading = useAppSelector((state) => state.Boards.loading)
+  console.log(loading, 'lading')
   const dispatch = useAppDispatch()
-
+  const [data, setData] = useState([])
+  useEffect(() => {
+    console.log('loading')
+    request
+      .get('/analytics')
+      .then((res) => {
+        setData(res.data)
+      })
+      .catch((err) => {
+        setData([])
+      })
+  }, [loading])
   useEffect(() => {
     dispatch(fetchBoardTask())
   }, [])
@@ -107,14 +117,15 @@ const Board = (props: any) => {
             )
           })}
         </DragDropContext>
-        <AddForm
+        {/* <AddForm
           onConfirm={(name: any) => {
             dispatch(createList({ name, position: lists.length + 1 }))
           }}
           placeholder='+ Add new list'
           focusPlaceholder='Enter list title'
           maxWidth='220px'
-        />
+        /> */}
+        {data.length && lists.length ? <Table data={data} /> : null}
       </BoardContainer>
     </div>
   )

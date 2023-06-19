@@ -9,6 +9,7 @@ import {
   reOrderList,
   removeCard,
   rerrangeList,
+  setLoading,
   updateCardContent,
 } from '../features/board_slice'
 
@@ -37,13 +38,8 @@ export const updateTodoPosition = (payload: IUpdatePositionReqandPay) => {
     isSameBoard,
   } = payload
   return async (dispatch: AppDispatch) => {
+    dispatch(setLoading(true))
     try {
-      appApi.updatePosition({
-        resourceList,
-        destinationList,
-        resourceSectionId,
-        destinationSectionId,
-      })
       dispatch(
         rerrangeList({
           isSameBoard,
@@ -53,7 +49,16 @@ export const updateTodoPosition = (payload: IUpdatePositionReqandPay) => {
           destinationColIndex,
         })
       )
+      await appApi.updatePosition({
+        resourceList,
+        destinationList,
+        resourceSectionId,
+        destinationSectionId,
+      })
+
+      dispatch(setLoading(false))
     } catch (e) {
+      dispatch(setLoading(true))
       console.log(e, 'error')
       //snackbar's toaster's
     }
@@ -104,6 +109,7 @@ export const onCardContentChange = (
   return async (dispatch: AppDispatch) => {
     try {
       let resposne = await appApi.updateContent(cardId, content)
+
       dispatch(updateCardContent({ listIndex, cardIndex, content }))
     } catch (e) {}
   }

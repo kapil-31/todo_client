@@ -1,6 +1,5 @@
 //@ts-nocheck
-import React, { useState, useRef } from 'react'
-import PropTypes from 'prop-types'
+import { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Input } from '../styles/Input.styles'
 import IconButton from './IconButton'

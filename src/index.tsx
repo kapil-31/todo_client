@@ -9,6 +9,7 @@ import theme from './styles/theme'
 import GlobalStyle from './styles/globalStyles'
 import { BrowserRouter } from 'react-router-dom'
 import { store } from './redux'
+import './app.css'
 
 const rootEl = document.getElementById('root')
 if (rootEl) {

@@ -47,7 +47,7 @@ const CardList = (props: ICardListType) => {
                   key={card._id}
                   card={card}
                   index={index}
-                  onChangeCardContent={(content) =>
+                  onChangeCardContent={(content: any) =>
                     props.onChangeCardContent(index, content)
                   }
                   onRemoveCard={() => props.onRemoveCard(index)}
@@ -56,14 +56,16 @@ const CardList = (props: ICardListType) => {
               )
             )}
             {provided.placeholder}
-            <AddForm
-              onConfirm={props.onAddCard}
-              placeholder='+ Add new card'
-              focusPlaceholder='Enter card content'
-              darkfont
-              width='auto'
-              gray
-            />
+            {props.list.name.toLowerCase() === 'completed' ? null : (
+              <AddForm
+                onConfirm={props.onAddCard}
+                placeholder='+ Add new card'
+                focusPlaceholder='Enter card content'
+                darkfont
+                width='auto'
+                gray
+              />
+            )}
           </CardListContainer>
         )}
       </Droppable>

@@ -1,10 +1,8 @@
 //@ts-nocheck
-import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+import { useState, useEffect, useRef } from 'react'
 import { CardListHeader as StyledCardListHeader } from '../styles/CardList.styles'
 import OutsideClickHandler from './OutsideClickHandler'
 import ContentEditable from './ContentEditable'
-import IconButton from './IconButton'
 import * as UtilsHelper from '../helpers/utils'
 
 const CardListHeader = (props: ICardListHeader) => {
@@ -54,6 +52,7 @@ const CardListHeader = (props: ICardListHeader) => {
         onMouseLeave={() => setOnHover(false)}
       >
         <ContentEditable
+          disabled
           innerRef={ref}
           html={listName}
           onChange={(e) => setListName(e.target.value)}
@@ -61,32 +60,9 @@ const CardListHeader = (props: ICardListHeader) => {
           onKeyDown={handleKeyDown}
           style={{ paddingRight: 24 }}
         />
-        {(onHover || editMode) && (
-          <IconButton.ButtonContainer
-            top='11px'
-            right={editMode ? '11px' : '42px'}
-          >
-            {editMode && (
-              <IconButton onClick={onClickSaveEdit} icontype={'confirm'} />
-            )}
-          </IconButton.ButtonContainer>
-        )}
-        {onHover && !editMode && (
-          <>
-            <IconButton.ButtonContainer top='11px' right='3px'>
-              <IconButton onClick={props.onRemoveList} icontype='delete' />
-            </IconButton.ButtonContainer>
-          </>
-        )}
       </StyledCardListHeader>
     </OutsideClickHandler>
   )
 }
 
-export type ICardListHeader = {
-  listName?: PropTypes.string
-  onChangeListName?: PropTypes.func
-  onRemoveList?: PropTypes.func
-  onDuplicateList?: PropTypes.func
-}
 export default CardListHeader

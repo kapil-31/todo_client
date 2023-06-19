@@ -26,7 +26,7 @@ interface TodoSliceType {
 
 const initialState: TodoSliceType = {
   lists: [],
-  loading: false,
+  loading: true,
   offset: 0,
   error: null,
 }
@@ -52,9 +52,11 @@ export const BoardSlice = createSlice({
         },
       ]
     },
-    removeList: (state, action: PayloadAction<any>) => {
-      console.log(action.payload)
+    setLoading: (state, action: PayloadAction<any>) => {
+      state.loading = action.payload
+    },
 
+    removeList: (state, action: PayloadAction<{ listIndex: number }>) => {
       state.lists.splice(action.payload.listIndex, 1)
     },
     rerrangeList: (state, action: PayloadAction<any>) => {
@@ -198,7 +200,7 @@ export const BoardSlice = createSlice({
       )
       .addCase(fetchBoardTask.rejected, (state, action: PayloadAction<any>) => {
         console.log(action as any)
-        state.loading = true
+        state.loading = false
         state.error = action
       })
   },
@@ -214,6 +216,7 @@ export const {
   rerrangeList,
   updateCardContent,
   renameBoarTitle,
+  setLoading,
 } = BoardSlice.actions
 
 export const selectAllBoards = (state: RootState) => state.Boards.lists

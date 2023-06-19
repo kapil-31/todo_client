@@ -1,6 +1,26 @@
 //@ts-nocheck
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
+export const Button = styled.button`
+  border: none;
+  outline: none;
+  background:${(props) => props.theme.info};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  padding:
+  border-radius: 3px;
+  font-size: ${(props: any) => props.fontSize || '25px'};
+  opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+  &:hover {
+    ${(props: any) =>
+      !props.disabled &&
+      css`
+        background-color: ${props.icontype === 'undo' ||
+        props.icontype === 'redo'
+          ? props.theme.blueHover
+          : props.theme.grayHover};
+      `};
+  }
+`
 export const Input = styled.input`
   background-color: ${(props) =>
     props.value ? 'white' : props.gray ? props.theme.mediumGray : '#5FA3D3'};
@@ -20,11 +40,9 @@ export const Input = styled.input`
   transition: width 0.15s;
   width: 100%;
   cursor: pointer;
-
   ::-webkit-input-placeholder {
     color: ${(props) => (props.darkfont ? props.theme.primaryFont : 'white')};
   }
-
   :-ms-input-placeholder {
     color: ${(props) => (props.darkfont ? props.theme.primaryFont : 'white')};
   }

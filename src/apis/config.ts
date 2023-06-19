@@ -1,10 +1,4 @@
-import axios, {
-  AxiosError,
-  AxiosHeaders,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios'
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import queryString from 'query-string'
 const baseURL = 'http://localhost:8080/api/v1'
 const request = axios.create({

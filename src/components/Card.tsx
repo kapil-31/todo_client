@@ -1,6 +1,4 @@
-//@ts-nocheck
-import React, { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+import { useState, useEffect, useRef } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import OutsideClickHandler from './OutsideClickHandler'
 import { CardContainer } from '../styles/Card.styles'
@@ -116,11 +114,4 @@ const Card = ({
   )
 }
 
-Card.propTypes = {
-  card: PropTypes.object,
-  index: PropTypes.number,
-  onChangeCardContent: PropTypes.func,
-  onRemoveCard: PropTypes.func,
-  onDuplicateCard: PropTypes.func,
-}
 export default Card

@@ -38,7 +38,7 @@ const Button = styled.button`
   }
 `
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer: any = styled.div`
   position: absolute;
   top: ${(props: any) => props.top || '2px'};
   right: ${(props: any) => props.right || '3px'};
@@ -76,16 +76,7 @@ const IconButton = (props: IconButtonProps) => {
     </Button>
   )
 }
-IconButton.propTypes = {
-  icontype: PropTypes.oneOf([
-    'edit',
-    'confirm',
-    'delete',
-    'undo',
-    'redo',
-    'copy',
-  ]),
-}
+
 IconButton.ButtonContainer = ButtonContainer
 
 export default IconButton
