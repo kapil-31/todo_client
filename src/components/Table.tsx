@@ -23,7 +23,7 @@ export default function Table({ data }: { data: any[] }) {
                 <tr key={index}>
                   <td>{item._id}</td>
                   <td>
-                    {(item.notCompletedTaskCount / item.completedTaskCount) *
+                    {(item.completedTaskCount / item.notCompletedTaskCount) *
                       100}
                     %
                   </td>
